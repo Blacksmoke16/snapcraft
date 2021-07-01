@@ -38,7 +38,7 @@ from snapcraft.plugins.v2 import PluginV2
 
 _CRYSTAL_CHANNEL = "latest/stable"
 
-class PluginImpl(PluginV2):
+class CrystalPlugin(PluginV2):
     @classmethod
     def get_schema(cls) -> Dict[str, Any]:
         return {
@@ -75,5 +75,5 @@ class PluginImpl(PluginV2):
 
         return [
             f'shards build --without-development {build_options}', # Build the binary
-            'cp -r ./bin "${SNAPCRAFT_PART_INSTALL}"/bin',   # Copy built binaries to the install dir
+            'cp -r ./bin "${SNAPCRAFT_PART_INSTALL}"/bin',         # Copy built binaries to the install dir
         ]
