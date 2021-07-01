@@ -38,6 +38,7 @@ from snapcraft.plugins.v2 import PluginV2
 
 _CRYSTAL_CHANNEL = "latest/stable"
 
+
 class CrystalPlugin(PluginV2):
     @classmethod
     def get_schema(cls) -> Dict[str, Any]:
@@ -62,7 +63,19 @@ class CrystalPlugin(PluginV2):
 
     def get_build_packages(self) -> Set[str]:
         # See https://github.com/crystal-lang/distribution-scripts/blob/8bc01e26291dc518390129e15df8f757d687871c/docker/ubuntu.Dockerfile#L9
-        return {"git", "make", "gcc", "pkg-config", "libssl-dev", "libxml2-dev", "libyaml-dev", "libgmp-dev", "libpcre3-dev", "libevent-dev", "libz-dev"}
+        return {
+            "git",
+            "make",
+            "gcc",
+            "pkg-config",
+            "libssl-dev",
+            "libxml2-dev",
+            "libyaml-dev",
+            "libgmp-dev",
+            "libpcre3-dev",
+            "libevent-dev",
+            "libz-dev",
+        }
 
     def get_build_environment(self) -> Dict[str, str]:
         return dict()
@@ -74,6 +87,6 @@ class CrystalPlugin(PluginV2):
             build_options = ""
 
         return [
-            f'shards build --without-development {build_options}', # Build the binary
-            'cp -r ./bin "${SNAPCRAFT_PART_INSTALL}"/bin',         # Copy built binaries to the install dir
+            f"shards build --without-development {build_options}",
+            'cp -r ./bin "${SNAPCRAFT_PART_INSTALL}"/bin',
         ]

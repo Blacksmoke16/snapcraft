@@ -19,6 +19,7 @@ from testtools.matchers import Equals
 
 from snapcraft.plugins.v2.crystal import CrystalPlugin
 
+
 class CrystalPluginTest(TestCase):
     def test_schema(self):
         self.assertThat(
@@ -29,7 +30,10 @@ class CrystalPluginTest(TestCase):
                     "additionalProperties": False,
                     "type": "object",
                     "properties": {
-                        "crystal-channel": {"type": "string", "default": "latest/stable"},
+                        "crystal-channel": {
+                            "type": "string",
+                            "default": "latest/stable",
+                        },
                         "crystal-build-options": {
                             "type": "array",
                             "uniqueItems": True,
@@ -47,20 +51,38 @@ class CrystalPluginTest(TestCase):
             crystal_channel = "latest/edge"
 
         self.assertThat(
-            CrystalPlugin(part_name="my-part", options=Options()).get_build_snaps(), 
-            Equals({"crystal/latest/edge"})
+            CrystalPlugin(part_name="my-part", options=Options()).get_build_snaps(),
+            Equals({"crystal/latest/edge"}),
         )
 
     def test_get_build_packages(self):
         self.assertThat(
-            CrystalPlugin(part_name="my-part", options=lambda: None).get_build_packages(), 
-            Equals({"git", "make", "gcc", "pkg-config", "libssl-dev", "libxml2-dev", "libyaml-dev", "libgmp-dev", "libpcre3-dev", "libevent-dev", "libz-dev"})
+            CrystalPlugin(
+                part_name="my-part", options=lambda: None
+            ).get_build_packages(),
+            Equals(
+                {
+                    "git",
+                    "make",
+                    "gcc",
+                    "pkg-config",
+                    "libssl-dev",
+                    "libxml2-dev",
+                    "libyaml-dev",
+                    "libgmp-dev",
+                    "libpcre3-dev",
+                    "libevent-dev",
+                    "libz-dev",
+                }
+            ),
         )
 
     def test_get_build_environment(self):
         self.assertThat(
-            CrystalPlugin(part_name="my-part", options=lambda: None).get_build_environment(), 
-            Equals(dict())
+            CrystalPlugin(
+                part_name="my-part", options=lambda: None
+            ).get_build_environment(),
+            Equals(dict()),
         )
 
     def test_get_build_commands(self):
@@ -72,7 +94,7 @@ class CrystalPluginTest(TestCase):
             CrystalPlugin(part_name="my-part", options=Options()).get_build_commands(),
             Equals(
                 [
-                    f'shards build --without-development ',
+                    f"shards build --without-development ",
                     'cp -r ./bin "${SNAPCRAFT_PART_INSTALL}"/bin',
                 ]
             ),
@@ -81,13 +103,13 @@ class CrystalPluginTest(TestCase):
     def test_get_build_commands_with_build_options(self):
         class Options:
             crystal_channel = "latest/stable"
-            crystal_build_options = ['--release', '--static']
+            crystal_build_options = ["--release", "--static"]
 
         self.assertThat(
             CrystalPlugin(part_name="my-part", options=Options()).get_build_commands(),
             Equals(
                 [
-                    f'shards build --without-development --release --static',
+                    f"shards build --without-development --release --static",
                     'cp -r ./bin "${SNAPCRAFT_PART_INSTALL}"/bin',
                 ]
             ),
